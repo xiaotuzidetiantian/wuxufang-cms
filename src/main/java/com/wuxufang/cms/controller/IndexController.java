@@ -20,6 +20,7 @@ import com.wuxufang.cms.domain.Channel;
 import com.wuxufang.cms.domain.Collect;
 import com.wuxufang.cms.domain.Compent;
 import com.wuxufang.cms.domain.Ill;
+import com.wuxufang.cms.domain.Links;
 import com.wuxufang.cms.domain.Slide;
 import com.wuxufang.cms.domain.User;
 import com.wuxufang.cms.service.ArticleService;
@@ -27,6 +28,7 @@ import com.wuxufang.cms.service.ChannelService;
 import com.wuxufang.cms.service.CollectService;
 import com.wuxufang.cms.service.CompentService;
 import com.wuxufang.cms.service.IllService;
+import com.wuxufang.cms.service.LinksService;
 import com.wuxufang.cms.service.SlideService;
 import com.github.pagehelper.PageInfo;
 import com.wuxufang.util.DateUtil;
@@ -48,10 +50,16 @@ public class IndexController {
 	private CollectService collectService;
 	@Resource
 	private IllService illService;
+	@Resource
+	private LinksService linksService;
 	
 	@RequestMapping(value = {"","/","index"})
 	public String index(Model model,Article article,@RequestParam(defaultValue = "1")Integer page,
 			@RequestParam(defaultValue = "5")Integer pageSize) {
+		
+		Thread t1 = null;
+		
+		
 		article.setStatus(1);//查询审核过的文章
 		article.setDeleted(0);//未删除
 		//查询出所有的栏目
@@ -100,6 +108,20 @@ public class IndexController {
 		// 查询出所有的疫情信息
 		Ill ill = illService.selectTotal();
 		model.addAttribute("ill", ill);
+		
+		
+		//查询左侧栏目
+		t1 = new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				PageInfo<Links> info = linksService.selects(1, 10);
+				model.addAttribute("linksInfo", info);
+			}
+		});
+		
+		t1.start();
+		
 		return "index/index";
 		
 	}

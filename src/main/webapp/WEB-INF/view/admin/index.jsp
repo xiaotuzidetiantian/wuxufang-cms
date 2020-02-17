@@ -35,7 +35,7 @@
 				<nav class="nav flex-column">
 				 <a class="list-group-item active" href="#" data="/admin/article/articles">文章管理</a>
 					 <a class="list-group-item " href="#" data="/admin/user/users">用户管理</a>
-					 <a class="list-group-item" href="#">友情链接</a>
+					 <a class="list-group-item" href="#" data="admin/links/selects">友情链接</a>
 				    <a class="list-group-item" href="#">系统设置</a>
 				</nav>
 			</div>

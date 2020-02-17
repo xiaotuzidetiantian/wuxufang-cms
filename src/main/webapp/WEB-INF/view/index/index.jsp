@@ -267,10 +267,22 @@
 							</div>
 						</div>
 					</div>
+					<!-- 友情链接 -->
+					<div class="card" style="width: 12rem;">
+						<div class="card-header">友情链接</div>
+						<div class="card-body"></div>
+					</div>
 				</div>
 			</div>
 
-
+			<!-- 友情链接 -->
+			<div class="row">
+				<div class="col-12">
+					<c:forEach items="${linkInfo.list }" var="l">
+						<a href="${l.url }" target="_blank">${l.text }</a>&nbsp;
+					</c:forEach>
+				</div>
+			</div>
 
 
 
