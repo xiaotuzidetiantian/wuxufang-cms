@@ -6,11 +6,11 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import com.wuxufang.cms.dao.CompentMapper;
 import com.wuxufang.cms.domain.Compent;
 import com.wuxufang.cms.service.CompentService;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 
 @Service
 public class CompentServiceImpl implements CompentService {
@@ -32,4 +32,8 @@ public class CompentServiceImpl implements CompentService {
 		return new PageInfo<Compent>(list);
 	}
 
+	
+
+	
+	
 }

@@ -5,7 +5,7 @@ import java.io.Serializable;
  * 
  * @ClassName: Slide 
  * @Description: 轮播图
- * @author: charles
+ * @author: 煜
  * @date: 2019年12月10日 下午3:10:19
  */
 public class Slide implements Serializable{

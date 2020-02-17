@@ -1,7 +1,7 @@
 package com.wuxufang.cms.service;
 
-import com.github.pagehelper.PageInfo;
 import com.wuxufang.cms.domain.Article;
+import com.github.pagehelper.PageInfo;
 
 public interface ArticleService {
 

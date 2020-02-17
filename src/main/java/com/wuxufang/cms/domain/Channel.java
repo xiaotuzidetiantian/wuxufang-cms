@@ -5,7 +5,7 @@ import java.io.Serializable;
  * 
  * @ClassName: Channel 
  * @Description: 栏目
- * @author: charles
+ * @author: 煜
  * @date: 2019年12月10日 下午3:09:04
  */
 public class Channel  implements Serializable{

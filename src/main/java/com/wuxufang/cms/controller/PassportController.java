@@ -14,13 +14,12 @@ import com.wuxufang.cms.service.UserService;
 import com.wuxufang.cms.util.CMSException;
 import com.wuxufang.cms.util.Result;
 
-
 /**
  * 
- * @ClassName: PassportController 
+ * @ClassName: PassportController
  * @Description: 注册、登录、注销的控制器
- * @author: 煜
- * @date: 2020年2月12日 下午6:34:31
+ * @author: charles
+ * @date: 2020年1月11日 上午10:03:17
  */
 @RequestMapping("passport")
 @Controller

@@ -6,7 +6,7 @@ import java.util.Date;
  * 
  * @ClassName: Article 
  * @Description: 文章
- * @author: charles
+ * @author: 煜
  * @date: 2019年12月10日 下午3:08:27
  */
 public class Article implements Serializable {

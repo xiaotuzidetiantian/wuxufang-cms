@@ -11,7 +11,6 @@ import com.wuxufang.cms.domain.Category;
 import com.wuxufang.cms.domain.Channel;
 import com.wuxufang.cms.service.ChannelService;
 
-
 @Service
 public class ChannelServiceImpl implements ChannelService {
 @Resource

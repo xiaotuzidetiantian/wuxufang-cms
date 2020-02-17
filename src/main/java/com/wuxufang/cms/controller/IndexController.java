@@ -14,17 +14,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.github.pagehelper.PageInfo;
 import com.wuxufang.cms.domain.Article;
 import com.wuxufang.cms.domain.Category;
 import com.wuxufang.cms.domain.Channel;
+import com.wuxufang.cms.domain.Collect;
 import com.wuxufang.cms.domain.Compent;
+import com.wuxufang.cms.domain.Ill;
 import com.wuxufang.cms.domain.Slide;
 import com.wuxufang.cms.domain.User;
 import com.wuxufang.cms.service.ArticleService;
 import com.wuxufang.cms.service.ChannelService;
+import com.wuxufang.cms.service.CollectService;
 import com.wuxufang.cms.service.CompentService;
+import com.wuxufang.cms.service.IllService;
 import com.wuxufang.cms.service.SlideService;
+import com.github.pagehelper.PageInfo;
 import com.wuxufang.util.DateUtil;
 
 @Controller
@@ -40,6 +44,10 @@ public class IndexController {
 	private SlideService slideService;
 	@Resource
 	private CompentService compentService;
+	@Resource
+	private CollectService collectService;
+	@Resource
+	private IllService illService;
 	
 	@RequestMapping(value = {"","/","index"})
 	public String index(Model model,Article article,@RequestParam(defaultValue = "1")Integer page,
@@ -87,6 +95,11 @@ public class IndexController {
 		hot24Article.setCreated(DateUtil.subDate(new Date()));//调用工具类，系统时间向前推荐24个小时
 		PageInfo<Article> hot24ArticleInfo = articleService.selects(hot24Article, 1, 4);//24小时热文，默认显示4条
 		model.addAttribute("hot24ArticleInfo", hot24ArticleInfo);
+		
+		
+		// 查询出所有的疫情信息
+		Ill ill = illService.selectTotal();
+		model.addAttribute("ill", ill);
 		return "index/index";
 		
 	}
@@ -103,7 +116,7 @@ public class IndexController {
 	 * @return: String
 	 */
 	@RequestMapping("articleDetail")
-	public String articleDetail(Model model ,Integer id,@RequestParam(defaultValue = "1")Integer page,@RequestParam(defaultValue = "5")Integer pageSize) {
+	public String articleDetail(Model model ,Integer id,@RequestParam(defaultValue = "1")Integer page,@RequestParam(defaultValue = "5")Integer pageSize,HttpSession session) {
 		//文章内容
 		Article article = articleService.select(id);
 		model.addAttribute("article", article);
@@ -112,8 +125,51 @@ public class IndexController {
 		PageInfo<Compent> compentInfo = compentService.selects(id, page, pageSize);
 		model.addAttribute("info", compentInfo);
 		
+		//热门文章  （在文章详情右侧显示）
+		Article hotArticle = new Article();
+		hotArticle.setHot(1);//热门文章
+		hotArticle.setStatus(1);//审核过的文章，才能显示
+		PageInfo<Article> hotArticles = articleService.selects(hotArticle, 1, 5);
+		model.addAttribute("hotArticles", hotArticles);
+		
+		//查询该文章是否被用户收藏过/从session 获取当前登录用户并根据查询条件获取collect
+		User user = (User) session.getAttribute("user");
+		 if(null!= user) {
+			Collect collect = collectService.selectByTitleAndUserId(article.getTitle(), user.getId());
+			model.addAttribute("collect", collect);
+		 }
+		
 		return "index/article";
 	}
+	
+	
+	
+	
+	@ResponseBody
+	@RequestMapping("collect")
+	 public boolean collect(Collect collect,HttpSession session) {
+		
+		User user = (User) session.getAttribute("user");
+		if(null ==user) {//session过期。
+			return false;
+		}
+		collect.setUser(user);
+		collect.setCreated(new Date());
+		return collectService.insert(collect) >0;
+	 }
+	
+//取消收藏
+	@ResponseBody
+	@RequestMapping("unCollect")
+	public boolean unCollect(Integer  id,HttpSession session) {
+		User user = (User) session.getAttribute("user");
+		if(null ==user) {//session过期。
+			return false;
+		}
+		return collectService.delete(id) >0;
+	}
+	
+	
 	/**
 	 * 
 	 * @Title: addContent 
@@ -140,7 +196,22 @@ public class IndexController {
 		
 		compent.setCreated(fmt.format(new Date()));
 		
+		
 		return compentService.insert(compent) >0;
+		
+	}
+
+	//疫情信息
+	//12  是湖北的城市ID,默认为湖北省
+	@RequestMapping("ill")
+	public String ill(Model model ,@RequestParam(defaultValue ="12" )Integer pid,@RequestParam(defaultValue = "1")Integer page,@RequestParam(defaultValue = "5")Integer pageSize) {
+		
+		PageInfo<Ill> info = illService.selects(page, pageSize);////查询全国的省的疫情
+		model.addAttribute("info", info);
+		
+		List<Ill> list = illService.selectsByPid(pid);//查询某一个省下面的市的疫情
+		model.addAttribute("list", list);
+		return "index/ill";
 		
 	}
 

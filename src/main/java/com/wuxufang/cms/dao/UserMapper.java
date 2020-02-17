@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.wuxufang.cms.domain.User;
 
-
 public interface UserMapper {
 	
 	/**

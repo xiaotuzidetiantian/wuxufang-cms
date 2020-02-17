@@ -5,7 +5,6 @@ import java.util.List;
 import com.wuxufang.cms.domain.Category;
 import com.wuxufang.cms.domain.Channel;
 
-
 public interface ChannelService {
 	/**
 	 * 

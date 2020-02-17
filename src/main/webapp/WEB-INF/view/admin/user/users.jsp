@@ -56,8 +56,7 @@
 		</form>
 
 	</div>
-	<table class="table table-hover table-striped table-bordered"
-		style="text-align: center;">
+	<table class="table table-hover table-striped table-bordered" style="text-align: center;">
 		<tr>
 			<td>序号</td>
 			<td>用户名</td>
@@ -76,20 +75,22 @@
 				</td>
 				<td><fmt:formatDate value="${u.created}"
 						pattern="yyyy-MM-dd HH:mm:ss" /></td>
-				<td><c:if test="${u.locked==0}">
-						<button type="button" class="btn btn-success"
-							onclick="update(this,${u.id})">正常</button>
-
-					</c:if> <c:if test="${u.locked==1}">
-						<button type="button" class="btn btn-danger"
-							onclick="update(this,${u.id})">禁用</button>
-
-					</c:if></td>
+				<td>
+				 <c:if test="${u.locked==0}">
+				  <button type="button" class="btn btn-success" onclick="update(this,${u.id})">正常</button>
+				 
+				 </c:if>
+				  <c:if test="${u.locked==1}">
+				  <button type="button" class="btn btn-danger" onclick="update(this,${u.id})">禁用</button>
+				 
+				 </c:if>
+				
+				</td>
 			</tr>
 
 		</c:forEach>
 		<tr>
-			<td colspan="10"><jsp:include
+			<td colspan="10" ><jsp:include
 					page="/WEB-INF/view/common/pages.jsp"></jsp:include></td>
 		</tr>
 

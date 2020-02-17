@@ -18,19 +18,21 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.github.pagehelper.PageInfo;
 import com.wuxufang.cms.domain.Article;
 import com.wuxufang.cms.domain.Category;
 import com.wuxufang.cms.domain.Channel;
+import com.wuxufang.cms.domain.Collect;
 import com.wuxufang.cms.domain.User;
 import com.wuxufang.cms.service.ArticleService;
 import com.wuxufang.cms.service.ChannelService;
+import com.wuxufang.cms.service.CollectService;
+import com.github.pagehelper.PageInfo;
 /**
  * 
  * @ClassName: MyController 
  * @Description: 个人中心
- * @author: 煜
- * @date: 2020年2月12日 下午6:34:17
+ * @author: charles
+ * @date: 2020年1月9日 上午9:07:28
  */
 @RequestMapping("my")
 @Controller
@@ -41,6 +43,9 @@ public class MyController {
 	
 	@Resource
 	private ChannelService channelService;
+	
+	@Resource
+	private CollectService collectService;
 	/**
 	 * 
 	 * @Title: index 
@@ -168,6 +173,28 @@ public class MyController {
 		public List<Category> categorys(Integer channelId){
 			return channelService.selectsByCid(channelId);
 			
+		}
+		
+		/**
+		 * 
+		 * @Title: collect 
+		 * @Description: 我 的收藏
+		 * @param page
+		 * @param pageSize
+		 * @param session
+		 * @param model
+		 * @return
+		 * @return: String
+		 */
+		@RequestMapping("collect")
+		public String collect(@RequestParam(defaultValue = "1") Integer page,@RequestParam(defaultValue = "5")Integer pageSize,HttpSession session,Model model) {
+		   User user = (User) session.getAttribute("user");
+		   if(null ==user) {
+			   return "redirect:/my";//sesesion过期
+		   }
+			PageInfo<Collect> info = collectService.selects(user.getId(), page, pageSize);
+			model.addAttribute("info",info);
+			return "my/collect/articles";
 		}
 		
 }
